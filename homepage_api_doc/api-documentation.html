@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bullseye API Documentation</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .api-docs-page {
+            padding-top: 80px; /* Space for fixed header */
+        }
+
+        .api-docs-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .api-sidebar {
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+        }
+
+        .api-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+        }
+
+        .api-nav-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .api-nav-item {
+            margin-bottom: 10px;
+        }
+
+        .api-nav-link {
+            display: block;
+            padding: 8px 15px;
+            border-radius: 4px;
+            color: var(--dark-text);
+            transition: var(--transition);
+        }
+
+        .api-nav-link:hover,
+        .api-nav-link.active {
+            background-color: rgba(74, 108, 250, 0.1);
+            color: var(--primary-color);
+        }
+
+        .api-section {
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .api-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .api-section h3 {
+            margin: 30px 0 15px;
+            color: var(--dark-text);
+        }
+
+        .api-endpoint {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .api-endpoint h4 {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .method-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 15px;
+            text-transform: uppercase;
+        }
+
+        .tag-get {
+            color: white;
+            background-color: #2d8ac7;
+        }
+
+        .tag-post {
+            color: white;
+            background-color: #3cb371;
+        }
+
+        .tag-delete {
+            color: white;
+            background-color: #e3342f;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Fira Code', monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #f5f7fd;
+            font-weight: bold;
+        }
+
+        .param-required {
+            color: #e3342f;
+            font-weight: bold;
+        }
+
+        .param-optional {
+            color: #6c757d;
+        }
+
+        .response-example {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+
+        @media screen and (max-width: 992px) {
+            .api-docs-container {
+                grid-template-columns: 1fr;
+            }
+
+            .api-sidebar {
+                position: relative;
+                top: 0;
+                height: auto;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-bullseye logo-icon"></i> BULLS ⚛️ AI
+            </a>
+            <nav>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="api-docs-page">
+        <div class="api-docs-container">
+            <div class="api-sidebar">
+                <h3>Contents</h3>
+                <ul class="api-nav-list">
+                    <li class="api-nav-item"><a href="#introduction" class="api-nav-link">Introduction</a></li>
+                    <li class="api-nav-item"><a href="#base-url" class="api-nav-link">Base URL</a></li>
+                    <li class="api-nav-item"><a href="#authentication" class="api-nav-link">Authentication</a></li>
+                    <li class="api-nav-item"><a href="#endpoints" class="api-nav-link">Endpoints</a>
+                        <ul class="api-nav-list" style="padding-left: 15px; margin-top: 10px;">
+                            <li class="api-nav-item"><a href="#chat-endpoint" class="api-nav-link">1. Chat with LLMs</a></li>
+                            <li class="api-nav-item"><a href="#generate-image" class="api-nav-link">2. Generate Image</a></li>
+                            <li class="api-nav-item"><a href="#get-conversations" class="api-nav-link">3. Get Conversations</a></li>
+                            <li class="api-nav-item"><a href="#delete-conversation" class="api-nav-link">4. Delete Conversation</a></li>
+                            <li class="api-nav-item"><a href="#delete-all" class="api-nav-link">5. Delete All Conversations</a></li>
+                            <li class="api-nav-item"><a href="#upload-image" class="api-nav-link">6. Upload Image (OCR)</a></li>
+                            <li class="api-nav-item"><a href="#health" class="api-nav-link">7. Health Check</a></li>
+                            <li class="api-nav-item"><a href="#test-google" class="api-nav-link">8. Test Google Search</a></li>
+                            <li class="api-nav-item"><a href="#test-langchain" class="api-nav-link">9. Test LangChain</a></li>
+                        </ul>
+                    </li>
+                    <li class="api-nav-item"><a href="#error-handling" class="api-nav-link">Error Handling</a></li>
+                    <li class="api-nav-item"><a href="#api-keys" class="api-nav-link">API Keys and Setup</a></li>
+                    <li class="api-nav-item"><a href="#dependencies" class="api-nav-link">Dependencies</a></li>
+                    <li class="api-nav-item"><a href="#running" class="api-nav-link">Running the Application</a></li>
+                    <li class="api-nav-item"><a href="#testing" class="api-nav-link">Testing Endpoints</a></li>
+                </ul>
+            </div>
+
+            <div class="api-content">
+                <div class="api-section" id="introduction">
+                    <h2>Introduction</h2>
+                    <p>Welcome to the Bullseye API documentation! This API provides a range of functionalities, now organized into modules for better structure and maintainability. Key features include:</p>
+                    <ul>
+                        <li><strong>Chat with Multiple LLMs</strong>: Interact with various Large Language Models (LLMs) from providers like OpenAI, Anthropic, Groq, and Google Gemini.</li>
+                        <li><strong>Google Search Integration</strong>: Leverage Google Search for information retrieval within chat conversations, powered by LangChain and direct search methods.</li>
+                        <li><strong>Hugging Face Model</strong>: Utilize a local Hugging Face model for text generation.</li>
+                        <li><strong>Image Generation</strong>: Generate images based on text prompts using a RapidAPI service.</li>
+                        <li><strong>Optical Character Recognition (OCR)</strong>: Extract text from uploaded images using Tesseract OCR.</li>
+                        <li><strong>User Authentication</strong>: Secure API access using OAuth2 Password Bearer token authentication.</li>
+                        <li><strong>Conversation History</strong>: Manage and retrieve conversation history stored in a MySQL database.</li>
+                    </ul>
+                    <p>This documentation will guide you through each endpoint, detailing request methods, parameters, request/response bodies, authentication requirements, and error handling.  Please note that due to recent backend modularization, endpoint paths and internal logic might have been adjusted. This documentation aims to reflect the most current API structure, but please verify endpoint details against your updated backend codebase if you encounter discrepancies.</p>
+                </div>
+
+                <div class="api-section" id="base-url">
+                    <h2>Base URL</h2>
+                    <p>The base URL for all API endpoints is: <code>http://localhost:8000</code> (assuming you are running the application locally with the default configuration). <strong>Please verify this base URL if your setup has changed with the backend modularization.</strong></p>
+                </div>
+
+                <div class="api-section" id="authentication">
+                    <h2>Authentication</h2>
+                    <p>This API uses <strong>OAuth2 Password Bearer</strong> authentication to secure access to most endpoints.</p>
+
+                    <h3>Obtaining an Access Token (<code>/token</code>)</h3>
+                    <div class="api-endpoint">
+                        <h4><span class="method-tag tag-post">POST</span> /token</h4>
+                        <p><strong>Content-Type:</strong> <code>application/x-www-form-urlencoded</code></p>
+                        <p>To authenticate and obtain an access token, you need to send a POST request to <code>/token</code> with your username and password.</p>
+
+                        <h5>Request Body Parameters (Form Data):</h5>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>username</code></td>
+                                    <td><code>string</code></td>
+                                    <td><span class="param-required">Yes</span></td>
+                                    <td>Your registered username.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>password</code></td>
+                                    <td><code>string</code></td>
+                                    <td><span class="param-required">Yes</span></td>
+                                    <td>Your account password.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5>Example Request (using <code>curl</code>):</h5>
+                        <pre>curl -X POST \
+  -d "username=your_username&password=your_password" \
+  http://localhost:8000/token</pre>
+
+                        <h5>Successful Response (Status Code: 200 OK):</h5>
+                        <pre>{
+  "access_token": "1",  // User ID as access token (Bearer token)
+  "token_type": "bearer"
+}</pre>
+
+                        <h5>Error Responses:</h5>
+                        <ul>
+                            <li><strong>Status Code: 400 Bad Request</strong>: Incorrect username or password.
+                                <pre>{"detail": "Incorrect username or password"}</pre>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h3>Registering a User (<code>/register</code>)</h3>
+                    <div class="api-endpoint">
+                        <h4><span class="method-tag tag-post">POST</span> /register</h4>
+                        <p><strong>Content-Type:</strong> <code>application/json</code></p>
+                        <p>To register a new user, send a POST request to <code>/register</code> with the desired username and password.</p>
+
+                        <h5>Request Body (JSON):</h5>
+                        <pre>{
+  "username": "new_username",
+  "password": "new_password"
+}</pre>
+
+                        <h5>Example Request (using <code>curl</code>):</h5>
+                        <pre>curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"username": "new_user", "password": "secure_password"}' \
+  http://localhost:8000/register</pre>
+
+                        <h5>Successful Response (Status Code: 200 OK):</h5>
+                        <pre>{
+  "message": "Registration successful"
+}</pre>
+
+                        <h5>Error Responses:</h5>
+                        <ul>
+                            <li><strong>Status Code: 400 Bad Request</strong>: Username already exists.
+                                <pre>{"detail": "Username already exists"}</pre>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h3>Using the Access Token</h3>
+                    <p>Once you obtain an <code>access_token</code>, you must include it in the <code>Authorization</code> header as a Bearer token for all subsequent requests to protected endpoints.</p>
+
+                    <h5>Example Header:</h5>
+                    <pre>Authorization: Bearer 1</pre>
+                </div>
+
+                <div class="api-section" id="endpoints">
+                    <h2>Endpoints</h2>
+
+                    <div class="api-section" id="chat-endpoint">
+                        <h3>1. Chat with LLMs (<code>/chat</code>)</h3>
+                        <div class="api-endpoint">
+                            <h4><span class="method-tag tag-post">POST</span> /chat</h4>
+                            <p><strong>Authentication:</strong> Required (OAuth2 Bearer Token)</p>
+                            <p><strong>Content-Type:</strong> <code>application/json</code></p>
+                            <p>This endpoint allows you to send a prompt to various LLMs and receive a text-based response. <strong>Verify if the endpoint path <code>/chat</code> is still correct after backend changes.</strong></p>
+
+                            <h5>Request Body (JSON):</h5>
+                            <pre>{
+  "prompt": "Write a short poem about the ocean.",
+  "model": "gpt-3.5-turbo",
+  "temperature": 0.7,
+  "api_provider": "openai"
+}</pre>
+
+                            <h5>Valid <code>api_provider</code> values:</h5>
+                            <ul>
+                                <li><code>"openai"</code>: OpenAI models (e.g., <code>gpt-3.5-turbo</code>, <code>gpt-4</code>).</li>
+                                <li><code>"anthropic"</code>: Anthropic Claude models (e.g., <code>claude-3-5-sonnet-20241022</code>).</li>
+                                <li><code>"groq"</code>: Groq models (e.g., <code>llama-3.2-90b-vision-preview</code>).</li>
+                                <li><code>"google"</code>: Google Gemini models (e.g., <code>gemini-1.5-pro</code>).</li>
+                                <li><code>"huggingface"</code>: Hugging Face <code>gpt2</code> model (model name in request is ignored, always uses <code>gpt2</code>).</li>
+                                <li><code>"langchain"</code>: LangChain Google Search agent (model name in request is ignored, always uses <code>gpt-3.5-turbo-instruct</code> and Google Search). Frontend should send <code>"google-search"</code> as model name for clarity.</li>
+                            </ul>
+
+                            <h5>Example Request (using <code>curl</code>):</h5>
+                            <pre>curl -X POST \
+  -H "Authorization: Bearer 1" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Explain quantum physics simply.", "model": "gpt-3.5-turbo", "temperature": 0.6, "api_provider": "openai"}' \
+  http://localhost:8000/chat</pre>
+
+                            <h5>Successful Response (Status Code: 200 OK):</h5>
+                            <pre>{
+  "response": "Quantum physics is the study of the incredibly tiny world of atoms and particles. It's weird because things aren't always in one place or state, but rather exist in probabilities until measured. Imagine a coin spinning in the air – it's neither heads nor tails until it lands. That's a bit like quantum particles!"
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="api-section" id="generate-image">
+                        <h3>2. Generate Image (<code>/generate-image</code>)</h3>
+                        <div class="api-endpoint">
+                            <h4><span class="method-tag tag-post">POST</span> /generate-image</h4>
+                            <p><strong>Authentication:</strong> Required (OAuth2 Bearer Token)</p>
+                            <p><strong>Content-Type:</strong> <code>application/json</code></p>
+                            <p>This endpoint generates an image based on a text prompt using a RapidAPI service. <strong>Verify if the endpoint path <code>/generate-image</code> is still correct after backend changes.</strong></p>
+
+                            <h5>Request Body (JSON):</h5>
+                            <pre>{
+  "prompt": "A futuristic cityscape at sunset",
+  "width": 512,
+  "height": 512,
+  "steps": 50
+}</pre>
+
+                            <h5>Example Request (using <code>curl</code>):</h5>
+                            <pre>curl -X POST \
+  -H "Authorization: Bearer 1" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "A cat riding a unicorn in space", "width": 512, "height": 512, "steps": 40}' \
+  http://localhost:8000/generate-image</pre>
+
+                            <h5>Successful Response (Status Code: 200 OK):</h5>
+                            <pre>{
+  "response": "Generated the image from prompt: A cat riding a unicorn in space",
+  "image": "/9j/4AAQSkZJRgABAQ...", // Base64 encoded image data
+  "success": true
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="api-section" id="get-conversations">
+                        <h3>3. Get Conversation History (<code>/conversations</code>)</h3>
+                        <div class="api-endpoint">
+                            <h4><span class="method-tag tag-get">GET</span> /conversations</h4>
+                            <p><strong>Authentication:</strong> Required (OAuth2 Bearer Token)</p>
+                            <p>Retrieves the conversation history for the authenticated user, ordered by timestamp in descending order (most recent first). <strong>Verify if the endpoint path <code>/conversations</code> is still correct after backend changes.</strong></p>
+
+                            <h5>Example Request (using <code>curl</code>):</h5>
+                            <pre>curl -X GET \
+  -H "Authorization: Bearer 1" \
+  http://localhost:8000/conversations</pre>
+
+                            <h5>Successful Response (Status Code: 200 OK):</h5>
+                            <pre>{
+  "conversations": [
+    {
+      "id": 5,
+      "conversation": "Quantum physics is the study...",
+      "model": "gpt-3.5-turbo",
+      "temperature": 0.6,
+      "timestamp": "2024-07-27T14:30:00",
+      "image_data": null,
+      "api_provider": "openai"
+    },
+    {
+      "id": 4,
+      "conversation": "A cat riding a unicorn in space",
+      "model": "Image Generator",
+      "temperature": 1.0,
+      "timestamp": "2024-07-27T14:25:00",
+      "image_data": "/9j/4AAQSkZJRgABAQ...", // Base64 encoded image data
+      "api_provider": "rapidapi"
+    },
+    // ... more conversations ...
+  ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="api-section" id="delete-conversation">
+                        <h3>4. Delete a Conversation (<code>/conversations/{conversation_id}</code>)</h3>
+                        <div class="api-endpoint">
+                            <h4><span class="method-tag tag-delete">DELETE</span> /conversations/{conversation_id}</h4>
+                            <p><strong>Authentication:</strong> Required (OAuth2 Bearer Token)</p>
+                            <p>Deletes a specific conversation entry based on its ID. <strong>Verify if the endpoint path <code>/conversations/{conversation_id}</code> is still correct after backend changes.</strong></p>
+
+                            <h5>Path Parameters:</h5>
+                            <ul>
+                                <li><code>{conversation_id}</code>: The ID of the conversation to delete (integer).</li>
+                            </ul>
+
+                            <h5>Example Request (using <code>curl</code>, deleting conversation with ID 5):</h5>
+                            <pre>curl -X DELETE \
+  -H "Authorization: Bearer 1" \
+  http://localhost:8000/conversations/5</pre>
+
+                            <h5>Successful Response (Status Code: 200 OK):</h5>
+                            <pre>{
+  "message": "Conversation deleted successfully"
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="api-section" id="delete-all">
+                        <h3>5. Delete All Conversations (<code>/conversations</code>)</h3>
+                        <div class="api-endpoint">
+                            <h4><span class="method-tag tag-delete">DELETE</span> /conversations</h4>
+                            <p><strong>Authentication:</strong> Required (OAuth2 Bearer Token)</p>
+                            <p>Deletes all conversation history for the authenticated user. <strong>Verify if the endpoint path <code>/conversations</code> for DELETE method is still correct after backend changes.</strong></p>
+
+                            <h5>Example Request (using <code>curl</code>):</h5>
+                            <pre>curl -X DELETE \
+  -H "Authorization: Bearer 1" \
+  http://localhost:8000/conversations</pre>
+
+                            <h5>Successful Response (Status Code: 200 OK):</h5>
+                            <pre>{
+  "message": "All conversations deleted successfully"
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="api-section" id="upload-image">
+                        <h3>6. Upload Image for OCR (<code>/upload-image</code>)</h3>
+                        <div class="api-endpoint">
+                            <h4><span class="method-tag tag-post">POST</span> /upload-image</h4>
+                            <p><strong>Authentication:</strong> Required (OAuth2 Bearer Token)</p>
+                            <p><strong>Content-Type:</strong> <code>multipart/form-data</code></p>
+                            <p>Uploads an image file to perform Optical Character Recognition (OCR) and extract text from it. <strong>Verify if the endpoint path <code>/upload-image</code> is still correct after backend changes.</strong></p>
+
+                            <h5>Request Body (Form Data):</h5>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>file</code></td>
+                                        <td><code>file</code></td>
+                                        <td><span class="param-required">Yes</span></td>
+                                        <td>The image file to upload (e.g., PNG, JPG).</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h5>Example Request (using <code>curl</code>):</h5>
+                            <pre>curl -X POST \
+  -H "Authorization: Bearer 1" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@/path/to/your/image.png" \
+  http://localhost:8000/upload-image</pre>
+
+                            <h5>Successful Response (Status Code: 200 OK):</h5>
+                            <pre>{
+  "message": "Image uploaded and text extracted successfully",
+  "ocr_text": "This is the text extracted from the image using OCR."
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="api-section" id="health">
+                        <h3>7. Health Check (<code>/health</code>)</h3>
+                        <div class="api-endpoint">
+                            <h4><span class="method-tag tag-get">GET</span> /health</h4>
+                            <p><strong>Authentication:</strong> Not required (Public endpoint)</p>
+                            <p>Provides a health status report of the API, including the status of dependencies, model availability, and database connection. Useful for monitoring and debugging. <strong>Verify if the endpoint path <code>/health</code> is still correct after backend changes.</strong></p>
+
+                            <h5>Example Request (using <code>curl</code>):</h5>
+                            <pre>curl http://localhost:8000/health</pre>
+
+                            <h5>Successful Response (Status Code: 200 OK):</h5>
+                            <pre>{
+  "status": "healthy",
+  "openai_version": "v1.x",
+  "anthropic_models": [
+    "claude-3-5-sonnet-20240620",
+    "claude-3-7-sonnet-20250219",
+    "claude-3-5-sonnet-20241022",
+    "..."
+  ],
+  "groq_models": [
+    "llama-3.3-70b-versatile",
+    "qwen-2.5-32b",
+    "llama-3.2-1b-preview",
+    "..."
+  ],
+  "google_models": [
+    "gemini-1.5-flash",
+    "gemini-1-5-flash-002",
+    "gemini-1.5-flash-8b",
+    "..."
+  ],
+  "huggingface_model": "gpt2",
+  "langchain_model": "gpt-3.5-turbo-instruct",
+  "huggingface_available": true,
+  "langchain_agent_available": true,
+  "langchain_error": null,
+  "direct_google_search_available": true,
+  "google_search_error": null,
+  "database_connected": true,
+  "fallback_enabled": true
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="api-section" id="test-google">
+                        <h3>8. Test Google Search (<code>/test-google-search</code>)</h3>
+                        <div class="api-endpoint">
+                            <h4><span class="method-tag tag-get">GET</span> /test-google-search</h4>
+                            <p><strong>Authentication:</strong> Required (OAuth2 Bearer Token)</p>
+                            <p>Tests the direct Google Search functionality. <strong>Verify if the endpoint path <code>/test-google-search</code> is still correct after backend changes.</strong></p>
+
+                            <h5>Query Parameters:</h5>
+                            <ul>
+                                <li><code>query</code>: The search query to test. Defaults to <code>"test"</code> if not provided.</li>
+                            </ul>
+
+                            <h5>Example Request (using <code>curl</code>):</h5>
+                            <pre>curl -X GET \
+  -H "Authorization: Bearer 1" \
+  "http://localhost:8000/test-google-search?query=FastAPI documentation"</pre>
+
+                            <h5>Successful Response (Status Code: 200 OK):</h5>
+                            <pre>{
+  "success": true,
+  "query": "FastAPI documentation",
+  "result": "FastAPI framework, high performance, easy to learn, fast to code, ready for production. ... FastAPI - The Python web framework for building APIs and web applications. ..."
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="api-section" id="test-langchain">
+                        <h3>9. Test LangChain (<code>/test-langchain-search</code>)</h3>
+                        <div class="api-endpoint">
+                            <h4><span class="method-tag tag-get">GET</span> /test-langchain-search</h4>
+                            <p><strong>Authentication:</strong> Required (OAuth2 Bearer Token)</p>
+                            <p>Tests the LangChain Google Search agent and fallback direct Google Search functionality. <strong>Verify if the endpoint path <code>/test-langchain-search</code> is still correct after backend changes.</strong></p>
+
+                            <h5>Query Parameters:</h5>
+                            <ul>
+                                <li><code>query</code>: The search query to test. Defaults to <code>"test"</code> if not provided.</li>
+                            </ul>
+
+                            <h5>Example Request (using <code>curl</code>):</h5>
+                            <pre>curl -X GET \
+  -H "Authorization: Bearer 1" \
+  "http://localhost:8000/test-langchain-search?query=Current weather in London"</pre>
+
+                            <h5>Successful Response (Status Code: 200 OK):</h5>
+                            <pre>{
+  "success": true,
+  "method": "langchain_agent" or "direct_search",
+  "query": "Current weather in London",
+  "result": "Weather conditions in London are currently..."
+}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-section" id="error-handling">
+                    <h2>Error Handling</h2>
+                    <p>The Bullseye API uses standard HTTP status codes to indicate the success or failure of API requests. In case of an error, the API will typically return a JSON response body with a <code>detail</code> key providing more information about the error.</p>
+
+                    <p><strong>Common Status Codes:</strong></p>
+                    <ul>
+                        <li><strong>200 OK</strong>: Request was successful.</li>
+                        <li><strong>400 Bad Request</strong>: The request was malformed or invalid. Check the request parameters and body.</li>
+                        <li><strong>401 Unauthorized</strong>: Authentication is required and has failed or has not yet been provided. Ensure you are sending a valid Bearer token in the <code>Authorization</code> header.</li>
+                        <li><strong>404 Not Found</strong>: The requested resource could not be found. <strong>This might be more relevant if endpoint paths have changed due to modularization. Verify endpoint paths.</strong></li>
+                        <li><strong>500 Internal Server Error</strong>: An unexpected error occurred on the server. This could be due to issues with the API itself or with an upstream service. Check the server logs for more details.</li>
+                    </ul>
+
+                    <p>For specific endpoints, refer to the 'Error Responses' sections for examples of error responses.</p>
+                </div>
+
+                <div class="api-section" id="api-keys">
+                    <h2>API Keys and Setup</h2>
+                    <p>To utilize the full functionality of the Bullseye API, you will need to set up API keys for the following services:</p>
+                    <ul>
+                        <li><strong>OpenAI API Key</strong>: Required for accessing OpenAI models like GPT-3.5 Turbo and GPT-4. Obtain your API key from the <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI platform</a>.</li>
+                        <li><strong>Anthropic API Key</strong>: Required for accessing Anthropic Claude models. Obtain your API key from the <a href="https://console.anthropic.com/settings/keys" target="_blank">Anthropic console</a>.</li>
+                        <li><strong>Groq API Key</strong>: Required for accessing Groq models. Obtain your API key from the <a href="https://console.groq.com/keys" target="_blank">Groq console</a>.</li>
+                        <li><strong>Google API Key & CSE ID</strong>: Required for Google Search integration and Google Gemini models.
+                            <ul>
+                                <li><strong>Google API Key</strong>: Obtain an API key from the <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Google Cloud Console</a>. Enable the "Custom Search API" and "Gemini API" for your project.</li>
+                                <li><strong>CSE ID (Custom Search Engine ID)</strong>: Create a Custom Search Engine at <a href="https://cse.google.com/cse/create/new" target="_blank">Google Custom Search Engine</a> and obtain the CSE ID.</li>
+                            </ul>
+                        </li>
+                        <li><strong>RapidAPI Key</strong>: Required for image generation. Obtain your RapidAPI key after subscribing to the "ChatGPT Vision" API on <a href="https://rapidapi.com/platypus-llm-platypus-llm-default/api/chatgpt-vision1" target="_blank">RapidAPI</a>.</li>
+                    </ul>
+
+                    <p><strong>Configuration in Backend (<code>.env</code> file or environment variables):</strong></p>
+                    <p>The backend application expects these API keys to be set as environment variables or within a <code>.env</code> file in the root directory of the project.  While the provided backend code includes hardcoded API keys for demonstration purposes, <strong>it is highly recommended to use environment variables or a <code>.env</code> file for security in a production environment.</strong></p>
+
+                    <p>Example <code>.env</code> file structure:</p>
+                    <pre>OPENAI_API_KEY=your_openai_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key
+GROQ_API_KEY=your_groq_api_key
+GOOGLE_API_KEY=your_google_api_key
+GOOGLE_CSE_ID=your_google_cse_id
+RAPIDAPI_KEY=your_rapidapi_key</pre>
+
+                    <p>Ensure you replace <code>your_api_key</code> and <code>your_cse_id</code> with your actual API keys and CSE ID.</p>
+                </div>
+
+                <div class="api-section" id="dependencies">
+                    <h2>Dependencies</h2>
+                    <p>The Bullseye API backend is built using Python and relies on several libraries. Ensure you have the following Python packages installed. You can install them using pip:</p>
+                    <pre>pip install fastapi uvicorn python-multipart pydantic mysql-connector-python Werkzeug Pillow openai anthropic groq google-generativeai pytesseract requests transformers langchain</pre>
+                    <p><strong>Note:</strong> <code>langchain</code> and related libraries are optional and required only for LangChain Google Search agent functionality. If you do not intend to use LangChain, you can omit these dependencies. However, for full functionality, it is recommended to install them. <strong>Verify if the dependencies list is still accurate after backend modularization, especially if new modules introduced new dependencies.</strong></p>
+                    <p><strong>Tesseract OCR:</strong> For the <code>/upload-image</code> endpoint (OCR functionality), you need to have Tesseract OCR engine installed on your system. Installation instructions vary by operating system. Please refer to the <a href="https://tesseract-ocr.github.io/tessdoc/Installation.html" target="_blank">Tesseract OCR documentation</a> for installation guides.</p>
+                </div>
+
+                <div class="api-section" id="running">
+                    <h2>Running the Application</h2>
+                    <p>To run the Bullseye API application, follow these steps:</p>
+                    <ol>
+                        <li><strong>Install Dependencies:</strong> Ensure you have installed all the necessary Python dependencies as listed in the <a href="#dependencies">Dependencies</a> section.</li>
+                        <li><strong>Set up API Keys:</strong> Configure your API keys as environment variables or in a <code>.env</code> file as described in the <a href="#api-keys">API Keys and Setup</a> section.</li>
+                        <li><strong>Database Setup:</strong> Make sure you have a MySQL database set up and configured as per the connection details in the backend code (<code>host</code>, <code>user</code>, <code>password</code>, <code>database</code> in the <code>mysql.connector.connect</code> function). Create a database named <code>tasos</code> (or change the name in the backend code) and ensure the user <code>matthias</code> (or your configured user) has the necessary permissions. The application will automatically attempt to add missing columns (<code>temperature</code>, <code>model</code>, <code>image_data</code>, <code>api_provider</code>) to the <code>conversations</code> table if they do not exist. You will need to create the <code>users</code> and <code>conversations</code> tables if they don't exist. Example SQL to create tables:
+                        <pre>-- SQL to create users table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- SQL to create conversations table
+CREATE TABLE conversations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    conversation TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    model VARCHAR(255),
+    temperature FLOAT,
+    image_data LONGTEXT,
+    api_provider VARCHAR(50) DEFAULT 'openai',
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+</pre>
+                        </li>
+                        <li><strong>Run the FastAPI Application:</strong> Navigate to the directory containing the <code>main.py</code> file (or the main entry point of your modularized backend) in your terminal and run the command:
+                        <pre>uvicorn main:app --reload --host 0.0.0.0 --port 8000</pre>
+                        <ul>
+                            <li><code>main</code>:  Refers to the <code>main.py</code> file. <strong>If your main application file or FastAPI instance name changed with modularization, update this command accordingly.</strong></li>
+                            <li><code>app</code>: Refers to the FastAPI instance named <code>app</code> in <code>main.py</code>. <strong>If your FastAPI instance name changed, update this command accordingly.</strong></li>
+                            <li><code>--reload</code>: Enables automatic reloading of the server upon code changes, useful for development.</li>
+                            <li><code>--host 0.0.0.0</code>:  Binds the server to all network interfaces, making it accessible from other devices on the network.</li>
+                            <li><code>--port 8000</code>: Starts the server on port 8000 (default).</li>
+                        </ul>
+                        </li>
+                        <li><strong>Access the API:</strong> Once the application is running, you can access the API endpoints at <code>http://localhost:8000</code>. <strong>Verify this URL is still correct.</strong></li>
+                    </ol>
+                </div>
+
+                <div class="api-section" id="testing">
+                    <h2>Testing Endpoints</h2>
+                    <p>You can test the API endpoints using various tools like <code>curl</code>, Postman, or Insomnia. Example <code>curl</code> commands are provided within each endpoint documentation. Here are general steps for testing:</p>
+                    <ol>
+                        <li><strong>Obtain an Access Token:</strong> First, register a user using the <code>/register</code> endpoint and then obtain an access token using the <code>/token</code> endpoint with your registered username and password. <strong>Verify these authentication endpoints are still functional.</strong></li>
+                        <li><strong>Send Requests:</strong> Use <code>curl</code> or your preferred API testing tool to send requests to the API endpoints. Remember to include the <code>Authorization: Bearer your_access_token</code> header for protected endpoints, replacing <code>your_access_token</code> with the token you obtained. <strong>When testing, pay close attention to the endpoint paths as they might have changed.</strong></li>
+                        <li><strong>Verify Responses:</strong> Check the HTTP status codes and response bodies to ensure the API is functioning as expected. Compare the responses with the example successful and error responses provided in the documentation.</li>
+                        <li><strong>Testing Specific Functionality:</strong>
+                            <ul>
+                                <li><strong>Chat Endpoint:</strong> Test different prompts, models, and API providers using the <code>/chat</code> endpoint. <strong>Verify endpoint path and request/response structure.</strong></li>
+                                <li><strong>Image Generation:</strong> Test image generation with various prompts and parameters using the <code>/generate-image</code> endpoint. <strong>Verify endpoint path and request/response structure.</strong></li>
+                                <li><strong>Conversation History:</strong> Verify that conversations are being saved and retrieved correctly using the <code>/conversations</code> endpoint. Test deleting conversations using <code>/conversations/{conversation_id}</code> and <code>/conversations</code> (delete all). <strong>Verify endpoint paths and response structures.</strong></li>
+                                <li><strong>OCR:</strong> Test the <code>/upload-image</code> endpoint by uploading image files and verifying the extracted text. <strong>Verify endpoint path and request/response structure.</strong></li>
+                                <li><strong>Health Check & Test Endpoints:</strong> Use the <code>/health</code>, <code>/test-google-search</code>, and <code>/test-langchain-search</code> endpoints to monitor the API's health and test specific functionalities. <strong>Verify endpoint paths and response structures.</strong></li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.api-nav-link');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+
+                    if (targetElement) {
+                        // Remove active class from all links
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        // Add active class to the clicked link
+                        this.classList.add('active');
+
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // Back to top button functionality
+            const backToTopButton = document.querySelector('.back-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+
+            backToTopButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Set 'Introduction' as active on page load
+            document.querySelector('.api-nav-link[href="#introduction"]').classList.add('active');
+        });
+    </script>
+</body>
+</html>
