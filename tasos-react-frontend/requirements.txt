@@ -1,0 +1,44 @@
+fastapi==0.100.0
+uvicorn==0.22.0
+python-multipart==0.0.6
+pydantic==2.0.0
+requests==2.31.0
+werkzeug==2.3.0
+Pillow==9.5.0
+openai==0.28.0
+anthropic==0.8.0
+groq==0.4.0
+google-generativeai==0.2.0
+mysql-connector-python==8.1.0
+pytesseract==0.3.10
+transformers==4.30.0
+# Updated langchain to the latest version for better compatibility
+langchain==0.1.0
+# Added specific version for langchain-google-genai
+langchain-google-genai==0.0.6
+# Added google-api-python-client for Google Custom Search API and YouTube Data API v3
+google-api-python-client==2.100.0
+# Added langchain-core for advanced message handling
+langchain-core==0.1.1
+# Added langgraph for improved agent architecture
+langgraph==0.0.19
+# Added pytube for YouTube video downloading and metadata extraction
+pytube==12.1.0
+# Added google-auth-oauthlib for YouTube API authentication
+google-auth-oauthlib==1.0.0
+torch
+tensorflow
+tf-keras
+# Added for improved error handling with Google APIs
+google-auth==2.22.0
+# Added for YouTube oEmbed handling and embedding videos in web pages
+python-oembed==0.2.4
+# Added for parsing YouTube API durations (ISO 8601 format)
+isodate==0.6.1
+# Added for HTML handling and video player generation
+html5lib==1.1
+beautifulsoup4==4.12.2
+# Added for caching YouTube API requests to avoid quota limits
+requests-cache==1.1.0
+# Added for file operations with video storage
+pathlib2==2.3.7

@@ -1,0 +1,890 @@
+/* src/App.css */
+:root {
+  --brightness: 0.5; /* Default brightness value (0 = darkest, 1 = lightest) */
+  --primary-blue: rgba(74, 108, 250, 0.9);
+  --primary-dark-blue: rgba(46, 70, 171, 0.9);
+  --huggingface-color: rgba(255, 117, 26, 0.8);
+  --huggingface-dark: rgba(230, 92, 0, 0.9);
+  --langchain-color: rgba(38, 166, 154, 0.8);
+  --langchain-dark: rgba(0, 137, 123, 0.9);
+  
+  /* Background colors with brightness interpolation */
+  --bg-color: rgb(
+    calc(45 + var(--brightness) * 210),
+    calc(45 + var(--brightness) * 210),
+    calc(45 + var(--brightness) * 210)
+  );
+  
+  /* Text colors with brightness interpolation */
+  --text-color: rgb(
+    calc(224 - var(--brightness) * 190),
+    calc(224 - var(--brightness) * 190),
+    calc(224 - var(--brightness) * 190)
+  );
+  
+  /* Border colors with brightness interpolation */
+  --border-color: rgba(
+    calc(70 + var(--brightness) * 185),
+    calc(70 + var(--brightness) * 185),
+    calc(70 + var(--brightness) * 185),
+    0.2
+  );
+  
+  /* Element background colors with brightness interpolation */
+  --element-bg-color: rgba(
+    calc(40 + var(--brightness) * 215),
+    calc(40 + var(--brightness) * 215),
+    calc(40 + var(--brightness) * 215),
+    0.8
+  );
+ 
+  /* Button colors with brightness interpolation */
+  --button-bg-color: rgba(92, 124, 250, 0.8);
+  --button-hover-color: rgba(66, 99, 235, 0.9);
+  
+  /* Shadow effect */
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body {
+  /* New blue gradient background to match homepage */
+  background: linear-gradient(135deg, rgba(15, 32, 75, 0.85) 0%, rgba(74, 108, 250, 0.7) 100%);
+  background-image: url('https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Keep the background fixed while scrolling */
+  background-blend-mode: overlay;
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(10, 20, 50, 0.7) 0%, rgba(74, 108, 250, 0.6) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+body.light {
+  --brightness: 1.0;
+}
+
+body.dark {
+  --brightness: 0.0;
+}
+
+.App {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--element-bg-color);
+  color: var(--text-color);
+  /* Darker shadow effect */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  backdrop-filter: blur(10px);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.brightness-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.brightness-control input {
+  width: 100px;
+}
+
+.theme-toggle {
+  padding: 10px;
+  background-color: var(--button-bg-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: auto;
+}
+
+.theme-toggle:hover {
+  background-color: var(--button-hover-color);
+}
+
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.form {
+  width: 48%;
+  background-color: var(--element-bg-color);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 15px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.full-width-button {
+  width: 100%;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--element-bg-color);
+  color: var(--text-color);
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 150px; /* ~10 lines */
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--button-bg-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: var(--button-hover-color);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.copy-response-button {
+  background-color: rgba(64, 192, 87, 0.8); /* Semi-transparent green */
+}
+
+.copy-response-button:hover {
+  background-color: rgba(55, 178, 77, 0.9);
+}
+
+/* Code block container with improved structure */
+.code-block {
+  position: relative;
+  margin: 1em 0;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+/* Add a header section to hold the button */
+.code-header {
+  position: relative;
+  padding: 5px;
+  background-color: rgba(52, 58, 64, calc(0.9 - var(--brightness) * 0.5));
+  display: flex;
+  justify-content: flex-end;
+  transition: background-color 0.3s ease;
+}
+
+/* Style the copy button specifically for code */
+.copy-code-button {
+  width: auto;
+  padding: 5px 10px;
+  background-color: rgba(252, 196, 25, 0.9); /* Yellow */
+  color: #333;
+  font-size: 12px;
+  font-weight: bold;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.copy-code-button:hover {
+  background-color: rgba(250, 176, 5, 1);
+}
+
+.code-content {
+  position: relative;
+}
+
+/* Override SyntaxHighlighter styles */
+.code-content pre {
+  margin: 0 !important;
+  border-radius: 0 0 5px 5px !important;
+}
+
+.code-block pre {
+  background-color: rgba(40, 44, 52, calc(0.95 - var(--brightness) * 0.7)) !important;
+  color: rgba(224, 224, 224, calc(1 - var(--brightness) * 0.7)) !important;
+  padding: 1em !important;
+  border-radius: 0 0 5px 5px !important;
+  overflow-x: auto !important;
+  margin: 0 !important;
+  font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.code-block pre code {
+  color: rgba(224, 224, 224, calc(1 - var(--brightness) * 0.7)) !important;
+  transition: color 0.3s ease;
+}
+
+.delete-button {
+  background-color: rgba(255, 146, 43, 0.8); /* Semi-transparent orange */
+}
+
+.delete-button:hover {
+  background-color: rgba(247, 103, 7, 0.9);
+}
+
+.delete-all-button {
+  background-color: rgba(250, 82, 82, 0.8); /* Semi-transparent red */
+}
+
+.delete-all-button:hover {
+  background-color: rgba(224, 49, 49, 0.9);
+}
+
+.chat-container, .conversations-container {
+  margin-bottom: 20px;
+  background-color: var(--element-bg-color);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.response-container {
+  margin-top: 20px;
+}
+
+/* Syntax highlighting colors that work with brightness */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6a9955 !important;
+}
+
+.token.punctuation {
+  color: #d4d4d4 !important;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #b5cea8 !important;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #ce9178 !important;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #d4d4d4 !important;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #569cd6 !important;
+}
+
+.token.function,
+.token.class-name {
+  color: #dcdcaa !important;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #d16969 !important;
+}
+
+/* Syntax highlighting adjusts based on brightness */
+body.light .token.comment,
+body.light .token.prolog,
+body.light .token.doctype,
+body.light .token.cdata {
+  color: #008000 !important;
+}
+
+body.light .token.punctuation {
+  color: #333 !important;
+}
+
+body.light .token.property,
+body.light .token.tag,
+body.light .token.boolean,
+body.light .token.number,
+body.light .token.constant,
+body.light .token.symbol,
+body.light .token.deleted {
+  color: #098658 !important;
+}
+
+body.light .token.selector,
+body.light .token.attr-name,
+body.light .token.string,
+body.light .token.char,
+body.light .token.builtin,
+body.light .token.inserted {
+  color: #a31515 !important;
+}
+
+body.light .token.operator,
+body.light .token.entity,
+body.light .token.url,
+body.light .language-css .token.string,
+body.light .style .token.string {
+  color: #333 !important;
+}
+
+body.light .token.atrule,
+body.light .token.attr-value,
+body.light .token.keyword {
+  color: #0000ff !important;
+}
+
+body.light .token.function,
+body.light .token.class-name {
+  color: #795e26 !important;
+}
+
+body.light .token.regex,
+body.light .token.important,
+body.light .token.variable {
+  color: #ee0000 !important;
+}
+
+code {
+  font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace !important;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  background-color: var(--element-bg-color);
+  color: var(--text-color);
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.mini-image {
+  width: 100px;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Model settings */
+.model-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  background-color: var(--element-bg-color);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.model-selector, .temperature-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.model-selector select {
+  flex-grow: 1;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--element-bg-color);
+  color: var(--text-color);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.temperature-control {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.temperature-control input[type="range"] {
+  width: 100%;
+  margin-top: 5px;
+}
+
+input[type="range"].disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Style for optgroup in select */
+optgroup {
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Model info in conversation history */
+.model-info {
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin-top: 8px;
+  padding-top: 5px;
+  border-top: 1px dotted rgba(204, 204, 204, 0.3);
+}
+
+/* Image generation styles */
+.mode-toggle {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.mode-button {
+  flex: 1;
+  background-color: var(--button-bg-color);
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 4px;
+}
+
+.mode-button:last-child {
+  margin-right: 0;
+}
+
+.mode-button.active {
+  background-color: var(--button-hover-color);
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.image-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  background-color: var(--element-bg-color);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.dimension-control {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.dimension-control label {
+  margin-right: 5px;
+}
+
+.dimension-control input[type="number"] {
+  width: 80px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--element-bg-color);
+  color: var(--text-color);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.generated-image-container {
+  margin-top: 20px;
+  text-align: center;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.generated-image {
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Debug info for image generation */
+.debug-info {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: rgba(255, 193, 7, 0.1); 
+  border-left: 3px solid rgba(255, 193, 7, 0.7);
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.debug-info p {
+  margin: 5px 0;
+}
+
+/* Styling for images in conversation history */
+.conversation-image-container {
+  margin: 10px 0;
+  text-align: center;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 5px;
+}
+
+.conversation-image {
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+/* API Provider selector */
+.api-provider-selector {
+  margin-bottom: 15px;
+}
+
+.api-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  gap: 5px;
+}
+
+.api-button {
+  flex: 1;
+  min-width: 110px;
+  padding: 7px 4px;
+  background-color: var(--button-bg-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+  font-size: 13px; /* Slightly smaller font size to fit all providers */
+}
+
+.api-button:last-child {
+  margin-right: 0;
+}
+
+.api-button.active {
+  background-color: var(--button-hover-color);
+  font-weight: bold;
+}
+
+/* HuggingFace specific styling */
+.api-button[onclick*="huggingface"] {
+  background-color: var(--huggingface-color);
+}
+
+.api-button[onclick*="huggingface"]:hover,
+.api-button[onclick*="huggingface"].active {
+  background-color: var(--huggingface-dark);
+}
+
+/* LangChain specific styling */
+.api-button[onclick*="langchain"] {
+  background-color: var(--langchain-color);
+}
+
+.api-button[onclick*="langchain"]:hover,
+.api-button[onclick*="langchain"].active {
+  background-color: var(--langchain-dark);
+}
+
+/* Model info banner */
+.model-info-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--button-bg-color);
+}
+
+.model-info-banner i {
+  font-size: 18px;
+}
+
+/* HuggingFace banner */
+.api-provider-selector:has([onclick*="huggingface"].active) + .model-info-banner {
+  background-color: rgba(255, 117, 26, 0.1);
+  border-left-color: var(--huggingface-color);
+}
+
+/* LangChain banner */
+.api-provider-selector:has([onclick*="langchain"].active) + .model-info-banner {
+  background-color: rgba(38, 166, 154, 0.1);
+  border-left-color: var(--langchain-color);
+}
+
+/* Loading indicator */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+/* Focus state for better accessibility */
+button:focus, input:focus, textarea:focus, select:focus {
+  outline: 2px solid #4263eb;
+  outline-offset: 2px;
+}
+
+/* Add Safari support for backdrop-filter */
+@supports (-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px)) {
+  .App {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  body.dark .App {
+    background-color: rgba(30, 30, 30, 0.2);
+  }
+}
+
+/* Media queries for responsive design */
+@media screen and (max-width: 768px) {
+  .api-toggle {
+    flex-wrap: wrap;
+  }
+  
+  .api-button {
+    margin-bottom: 5px;
+    min-width: calc(33% - 5px);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .api-button {
+    min-width: calc(50% - 5px);
+  }
+}
+
+/* YouTube video styles */
+.youtube-controls {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px dashed #ddd;
+}
+
+.youtube-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.youtube-search-button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.youtube-search-button:hover {
+  background-color: #cc0000;
+}
+
+.video-player-size select {
+  padding: 5px;
+  margin-left: 5px;
+}
+
+.embedded-video-container {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.video-player-container {
+  width: 100%;
+}
+
+.video-player-container iframe {
+  width: 100%;
+  border: none;
+}
+
+.youtube-search-results {
+  margin: 15px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  position: relative;
+}
+
+.close-results {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.video-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.video-result-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.video-thumbnail {
+  width: 100%;
+  position: relative;
+}
+
+.video-thumbnail img {
+  width: 100%;
+  cursor: pointer;
+}
+
+.video-info {
+  padding: 10px;
+}
+
+.video-info h4 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+}
+
+.video-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.video-actions button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.video-actions button:first-child {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.video-actions button:last-child {
+  background-color: #3498db;
+  color: white;
+}
+
+.conversation-video-container {
+  margin: 10px 0;
+}
+
+.play-video-button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.play-video-button:hover {
+  background-color: #cc0000;
+}
+
+/* Dark theme adjustments */
+.dark .video-result-card {
+  background-color: #333;
+  border-color: #444;
+}
+
+.dark .video-info h4, 
+.dark .video-info p {
+  color: #eee;
+}
+
+.dark .youtube-controls {
+  background-color: #333;
+  border-color: #444;
+}
