@@ -60,10 +60,10 @@ if not os.path.exists(HTML_PLAYER_TEMP_DIR):
 
 # Database Configuration
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "matthias",
-    "password": "Ma-294022275",
-    "database": "tasos"
+    "host": "place your host here",
+    "user": "enter your user here",
+    "password": "enter your password here",
+    "database": "enter your database name here",
 }
 
 # RapidAPI Configuration
