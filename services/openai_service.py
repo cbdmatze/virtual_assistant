@@ -225,4 +225,3 @@ Make it more comprehensive while maintaining accuracy and readability.
     except Exception as e:
         logger.error(f"Error expanding OpenAI response: {e}")
         return initial_response
-a
